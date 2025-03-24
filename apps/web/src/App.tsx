@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { ProductList } from './components/ProductList';
+import { ShoppingCart } from './components/ShoppingCart';
+import { OrdersPage } from './components/OrdersPage';
+import { CartProvider } from './context/CartContext';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activePage, setActivePage] = useState<'products' | 'cart' | 'orders'>('products');
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <CartProvider>
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <h1 className="text-xl font-bold text-gray-900">E-Commerce Store</h1>
+              <nav className="flex space-x-4">
+                <button 
+                  onClick={() => setActivePage('products')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                    activePage === 'products' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Products
+                </button>
+                <button 
+                  onClick={() => setActivePage('cart')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                    activePage === 'cart' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Cart
+                </button>
+                <button 
+                  onClick={() => setActivePage('orders')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                    activePage === 'orders' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Orders
+                </button>
+              </nav>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {activePage === 'products' && <ProductList />}
+          {activePage === 'cart' && <ShoppingCart />}
+          {activePage === 'orders' && <OrdersPage />}
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </CartProvider>
+  );
 }
 
-export default App
+export default App; 
